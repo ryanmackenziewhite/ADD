@@ -24,8 +24,8 @@ then
     if [[ ${__OS} == "CentOS Linux" ]]
     then
         logger "${info} CentOS Linux network"
-        sudo perl -i -pe "s/BOOTPROTO=dhcp/BOOTPROTO=static/g" /etc/sysconfig/network-scripts/ifcfg-enp0s8
-        sudo perl -i -pe "s/ONBOOT=no/ONBOOT=yes/g" /etc/sysconfig/network-scripts/ifcfg-enp0s8
+        sudo perl -i -pe "s/BOOTPROTO=dhcp/BOOTPROTO=\"static\"/g" /etc/sysconfig/network-scripts/ifcfg-enp0s8
+        sudo perl -i -pe "s/ONBOOT=no/ONBOOT=\"yes\"/g" /etc/sysconfig/network-scripts/ifcfg-enp0s8
         echo -e "IPADDR=${ipaddr}" | sudo tee -a "/etc/sysconfig/network-scripts/ifcfg-enp0s8"
         echo -e "NETMASK=${networkcfg[3]}" | sudo tee -a "/etc/sysconfig/network-scripts/ifcfg-enp0s8"
         echo -e "NETWORKING=yes" | sudo tee -a "/etc/sysconfig/network"

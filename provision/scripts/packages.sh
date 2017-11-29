@@ -7,11 +7,11 @@
 
 # Installers
 install_ssh() {
-    executor "sudo ${__PKGMGR} install ssh"
+    executor "sudo ${__PKGMGR} install --disablerepo=extras,updates ssh"
 }
 
 install_vim() {
-    executor "sudo ${__PKGMGR} install vim"
+    executor "sudo ${__PKGMGR} install --disablerepo=extras,updates vim"
 }
 
 install_jdk() {
@@ -24,7 +24,7 @@ install_jdk() {
 }
 
 install_python() {
-    executor "sudo ${__PKGMGR} install python3"
+    executor "sudo ${__PKGMGR} install --disablerepo=extras,updates python3"
 }
 
 
