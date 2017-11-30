@@ -19,7 +19,12 @@ sudo echo -e "HADOOP_PREFIX=$__HADOOP_PATH/$__HADOOP_VERSION" | sudo tee -a /etc
 sudo echo -e "export HADOOP_PREFIX" | sudo tee -a /etc/profile.d/hadoop_setup.sh
 sudo echo -e "JAVA_HOME=/usr" | sudo tee -a /etc/profile.d/hadoop_setup.sh
 sudo echo -e "export JAVA_HOME" | sudo tee -a /etc/profile.d/hadoop_setup.sh
-
+sudo echo -e "HADOOP_LOG_DIR=/var/log/hadoop" | sudo tee -a /etc/profile.d/hadoop_setup.sh
+sudo echo -e "export HADOOP_LOG_DIR" | sudo tee -a /etc/profile.d/hadoop_setup.sh
+sudo echo -e "YARN_LOG_DIR=/var/log/hadoop/yarn" | sudo tee -a /etc/profile.d/hadoop_setup.sh
+sudo echo -e "export YARN_LOG_DIR" | sudo tee -a /etc/profile.d/hadoop_setup.sh
+sudo echo -e "HADOOP_MAPRED_LOG_DIR=/var/log/hadoop/mapred" | sudo tee -a /etc/profile.d/hadoop_setup.sh
+sudo echo -e "export HADOOP_MAPRED_LOG_DIR" | sudo tee -a /etc/profile.d/hadoop_setup.sh
 echo -e "export PATH=$PATH:$__HADOOP_PATH/$__HADOOP_VERSION/bin:$__HADOOP_PATH/$__HADOOP_VERSION/sbin" | sudo tee -a /etc/environment
 
 # Create the storage directories
@@ -35,4 +40,7 @@ fi
 
 # Configure the hadoop environment scripts
 # Note that MR and YARN shell scripts overide values in hadoop-env.sh
+sudo mkdir /var/log/hadoop
+sudo chown -R hadoop:hadoop /var/log/hadoop
+sudo chmod g+rw /var/log/hadoop 
 

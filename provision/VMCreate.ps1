@@ -1,11 +1,10 @@
- Param(
-    [int]$index = 1,
+Param(
+    [string]$VM = "LinuxHadoop",
     [int]$PF = 2222, 
     [string]$MODE="create", 
     [boolean]$namenode = $false,
     [int]$storage = 32768  
 )
-
 
 $cwd = Get-Location | Select-Object -exp Path
 Set-Variable -Name "VBPath" -Value "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe"
@@ -16,28 +15,31 @@ if($namenode)
 {
     $ram = 8192
 }
-
 else {
     $ram = 2048
 }
 
 
-$VM = "LinuxHadoop$index"
 Write-Host "VM: $VM"
 Write-Host "SSH Port Forward: $PF"
 Write-Host "Mode: $MODE"
 
 if($MODE.equals("create"))
 {
-    Set-Variable -Name "VM" -Value "LinuxHadoop$index"
-    # New-Item -ItemType "Directory" -Force -Path "C:\Users\$env:USERNAME\VirtualBox VMs\$VM"
-    # Set-Location -Path "C:\Users\$env:USERNAME\VirtualBox VMs\$VM
+    Set-Variable -Name "VM" -Value $VM
+    New-Item -ItemType "Directory" -Force -Path "C:\Users\$env:USERNAME\VirtualBox VMs\$VM"
+    Set-Location -Path "C:\Users\$env:USERNAME\VirtualBox VMs\$VM"
+    
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" createhd --filename "$VM.vdi" --size $storage
+
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" createvm --name $VM --ostype "Linux_64" --register
+
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" storagectl $VM --name "SATA Controller" --add sata --controller IntelAHCI
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" storageattach $VM --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$VM.vdi"
+
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" storagectl $VM --name "IDE Controller" --add ide
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" storageattach $VM --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium C:\Users\$env:USERNAME\Downloads\CentOS-7-x86_64-Everything-1708.iso
+
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" modifyvm $VM --ioapic on
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" modifyvm $VM --boot1 dvd --boot2 disk --boot3 none --boot4 none
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" modifyvm $VM --memory $ram --vram 128
@@ -49,7 +51,6 @@ if($MODE.equals("create"))
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" sharedfolder add $VM --name vmshare --hostpath "C:\Users\ryanwhi\vmshare" --automount
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" startvm $VM
 }
-
 elseif($MODE.equals("finalize")){
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" controlvm $VM poweroff
     Start-Sleep -s 10
@@ -57,9 +58,8 @@ elseif($MODE.equals("finalize")){
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" storageattach $VM --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium "additions"
     & "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" startvm $VM
 }
-
 else{
     Write-Host "Incorrect Mode"
 }
 
-Set-Location $cwd 
+Set-Location $cwd
