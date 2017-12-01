@@ -28,15 +28,19 @@ sudo echo -e "export HADOOP_MAPRED_LOG_DIR" | sudo tee -a /etc/profile.d/hadoop_
 echo -e "export PATH=$PATH:$__HADOOP_PATH/$__HADOOP_VERSION/bin:$__HADOOP_PATH/$__HADOOP_VERSION/sbin" | sudo tee -a /etc/environment
 
 # Create the storage directories
+sudo mkdir -p /data/dfs/nn
+sudo chown -R hdfs:hdfs /data/dfs/nn
+sudo mkdir -p /data/dfs/dn
+sudo chown -R hdfs:hdfs /data/dfs/dn
 # Do we need to create 1...n for datanode and add these directories?
-if [[ ${nodename} == "master" ]]
-then
-    sudo mkdir -p /data/dfs/nn
-    sudo chown -R hdfs:hdfs /data/dfs/nn
-else
-    sudo mkdir -p /data/dfs/dn
-    sudo chown -R hdfs:hdfs /data/dfs/dn
-fi
+#if [[ ${nodename} == "master" ]]
+#then
+#    sudo mkdir -p /data/dfs/nn
+#    sudo chown -R hdfs:hdfs /data/dfs/nn
+#else
+#    sudo mkdir -p /data/dfs/dn
+#    sudo chown -R hdfs:hdfs /data/dfs/dn
+#fi
 
 # Configure the hadoop environment scripts
 # Note that MR and YARN shell scripts overide values in hadoop-env.sh
