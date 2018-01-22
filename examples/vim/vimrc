@@ -1,0 +1,174 @@
+" vim configuration file
+" Ryan Mackenzie White, University of South Carolina
+" requires several input packages that currently are tarballed 
+" and copied ... gonna need some reverse engineering to redo
+" .vim/
+" --- after
+"     --- syntax/c.vim
+"     --- syntax/cpp/stl.vim
+" --- bundle
+"     --- Vundle.vim
+"     --- delimitMate
+"     --- syntastic
+" --- doc
+"     --- NERD_tree.txt 
+"     --- alternate.txt
+"     --- tags
+" --- plugin
+"     --- NERD_tree.vim
+"     --- a.vim
+"     --- minibufexpl.vim
+"     --- python.vim
+"     --- tabpage_sort.vim.broken
+" To use it, copy it to
+"     for Unix and OS/2:  ~/.vimrc
+" When started as "evim", evim.vim will already have done these settings.
+if v:progname =~? "evim"
+  finish
+endif
+colorscheme desert
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
+" Vundle plugin manager
+filetype on
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'aperezdc/vim-template'
+Plugin 'Raimondi/delimitMate'
+call vundle#end()
+"
+syntax on
+filetype indent plugin on
+set modeline
+"Here are the new options for customized vim
+set mouse=a
+set wildmenu
+set wildmode=list:longest,full
+fixdel
+"suppresses the regular vim tabs
+set showtabline=0
+set tabpagemax=50
+"set up tab controls
+map <C-S-tab> :tabprevious<cr>
+map <C-tab> :tabnext<cr>
+"Set up proper indentation
+set autoindent
+set cindent
+"set tabstop=2
+set smartindent
+"set softtabstop=2
+"set shiftwidth=2
+"set expandtab
+set ts=8
+set sw=4
+"Show match of bracket
+set showmatch
+
+"ADvancing searching
+set incsearch
+
+" allow bacspacing over everything in insert mode
+" set backspace=2
+":set nocp
+":map <BS> ^H
+set backspace=indent,eol,start
+fixdel
+
+if has("vms")
+  set nobackup          " do not keep a backup file, use versions instead
+else
+  set backup            " keep a backup file
+endif
+set history=50          " keep 50 lines of command line history
+set ruler               " show the cursor position all the time
+set showcmd             " display incomplete commands
+set incsearch           " do incremental searching
+" Prevent auto comment
+set formatoptions-=c
+
+let g:miniBufExplUseSingleClick = 1
+let g:miniBufExplVSplit = 25
+"let g:miniBufExplMaxSize = 15
+"let g:miniBufExplSplitToEdge = 0
+let g:miniBufExplSplitBelow=0
+
+" Need to fix path for release headers
+" start of default statusline
+" investigate use of powerline plugin w/ syntastic
+"" set statusline=%f\ %h%w%m%r\
+"
+" syntastic
+"" set statusline+=%#warningmsg#
+"" set statusline+=%{SyntasticStatuslineFlag()}
+"" set statusline+=%*
+
+" end of default statusline (with ruler)
+"" set statusline+=%=%(%l,%c%V\ %=\ %P%)
+
+" Missing functionality to use CMake or release build path for includes
+"" let g:syntastic_always_populate_loc_list = 1
+"" let g:syntastic_auto_loc_list = 1
+"" let g:syntastic_check_on_open = 1
+"" let g:syntastic_check_on_wq = 0
+"" let g:syntastic_cpp_check_header = 1
+"let g:syntastic_c_remove_include_errors = 1
+"let g:syntastic_c_no_default_include_dirs = 1
+"let g:syntastic_c_no_include_search = 1
+" let g:syntastic_c_include_dirs = ['../*']
+" let g:syntastic_python_python_exec = '/opt/local/bin/python3'
+"
+" vim-template
+let g:email = "ryan.white4@canada.ca"
+let g:user = "Ryan Mackenzie White"
+let g:license = ""
+" Don't use Ex mode, use Q for formatting
+map Q gq
+" This is an alternative that also works in block mode, but the deleted
+" text is lost and it only works for putting the current register.
+"vnoremap p "_dp
+
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  filetype on
+  au BufNewFile,BufRead *.rdl set filetype=cpp
+  set hlsearch
+endif
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+  " Enable file type detection.
+  " Use the default filetype settings, so that mail gets 'tw' set to 72,
+  " 'cindent' is on in C files, etc.
+  " Also load indent files, to automatically do language-dependent indenting.
+  filetype plugin indent on
+
+  " Put these in an autocmd group, so that we can delete them easily.
+  augroup vimrcEx
+  au!
+
+  " For all text files set 'textwidth' to 78 characters.
+  autocmd FileType text setlocal textwidth=78
+
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
+
+  augroup END
+
+else
+
+  set autoindent                " always set autoindenting on
+
+endif " has("autocmd")
