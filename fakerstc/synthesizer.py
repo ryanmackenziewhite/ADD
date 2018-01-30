@@ -12,6 +12,8 @@ Generates the data using faker
 
 import unittest
 import functools
+import importlib
+import sys, inspect
 
 from holder import Holder
 from faker import Faker
@@ -37,28 +39,50 @@ class Synthesizer(object):
         '''
         self.holder = Holder(module, model)
         self.fake = Faker(local)
+        self.add_providers()
     
-    def add_provider(self, provider):
+    def add_providers(self):
         '''
         Add custom providers
         '''
-        pass
+        providers = self.holder.providers()
+        
+        klass = []
+        for key in providers:
+            try:
+                module_name = 'providers.' + key
+                module = importlib.import_module(module_name)
+                print(dir(module)) 
+                for provider in providers[key]:
+                    try:
+                        klass.append(getattr(module, provider))
+                    except AttributeError:
+                        print('Class does not exist ', provider)
+            except:
+                print('Module does not exist ', module_name)
+            for k in klass:
+                self.fake.add_provider(k)
 
     def generate(self):
-        providers = self.holder.providers()
+        fakers = self.holder.fakers()
         darr = []
-        for fname in providers:
-            parms = providers[fname]
+        for fname in fakers:
+            parms = fakers[fname]
             fake = None
             try:
                 fake = functools.partial(self.fake.__getattribute__(fname))
             except:
-                print('Cannot find fake in Faker')
-                
+                print('Cannot find fake in Faker ', fname)
+            
             if parms is None:
-                darr.append(fake())
+                value = fake()
+                darr.append(value)
             else:
-                darr.append(fake(parms))
+                value = fake(parms)
+                if isinstance(value, list):
+                    darr.extend(value)
+                else:
+                    darr.append(value)
         return darr        
 
 

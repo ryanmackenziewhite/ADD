@@ -22,8 +22,10 @@ from .model import Model
 
 class SampleModelA(Model):
     def __init__(self):
-        meta = {'name': None,
-                'ean': 13}
+        meta = {'Providers': [],
+                'Fakers': {'name': None,
+                           'ean': 13}
+                }
         super(SampleModelA, self).__init__(meta)
 
 
@@ -34,8 +36,17 @@ class CustomModel(Model):
         pass to the provider 
         as an argument
         '''
-        meta = {'name': None,
-                'ean': 13,
-                'foo': None}
+        meta = {'Providers': {'foo': ['FooProvider'],
+                              'glm': ['GLMProvider']},
+                'Fakers': {'name': None,
+                           'ean': 13,
+                           'foo': None,
+                           'glm': {'Fakers': ['random_int', 'random_int'],
+                                   'Parameters': [10, 0.1, 100, 1] 
+                                   }
+                           },
+                'Pdfs': None
+                }
+        
         super(CustomModel, self).__init__(meta)
 

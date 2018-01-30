@@ -36,10 +36,10 @@ class Holder(object):
             try:
                 klass = getattr(module, class_name)
             except AttributeError:
-                print('Class does not exist')
+                print('Class does not exist', class_name)
         except ImportError:
-            print('Module does not exist')
-        
+            print('Module does not exist', module_name)
+        print('Added Model ', class_name) 
         self.model = klass    
     
     @property
@@ -52,6 +52,12 @@ class Holder(object):
     
     def providers(self):
         ''' 
-        return model dict
+        return model metadata dict
         '''
-        return self.model.meta
+        return self.model.meta['Providers']
+
+    def fakers(self):
+        '''
+        return model provider list
+        '''
+        return self.model.meta['Fakers']

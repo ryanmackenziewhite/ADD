@@ -32,4 +32,7 @@ class Model(object):
         self.__meta = mdata
 
     def provider(self, name):
-        return self.meta[name]
+        return self.meta['Providers'][name]
+
+    def faker(self, name):
+        return self.meta['Fakers'][name]
