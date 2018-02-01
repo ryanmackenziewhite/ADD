@@ -17,7 +17,7 @@ import sys, inspect
 
 from holder import Holder
 from faker import Faker
-
+from writer import Writer
 
 class Synthesizer(object):
     '''
@@ -95,6 +95,12 @@ class TestCase(unittest.TestCase):
         
         s2 = Synthesizer('examples', 'CustomModel', 'en_CA')
         print(s2.generate())
+
+        mywriter = Writer('test', s, 10000)
+        mywriter.write()
+
+        mywriter2 = Writer('test2', s2, 50000)
+        mywriter2.write()
 
 
 if __name__ == '__main__':

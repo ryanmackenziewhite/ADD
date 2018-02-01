@@ -53,7 +53,7 @@ class GLMProvider(BaseProvider):
         
         Should the scale go as 1/sqrt(sample size)?
         '''
-        y = np.dot(np.asarray(X), beta) + np.random.normal(loc=0., scale=sigma)
+        y = np.dot(np.asarray(X), beta) + self.generator.random.gauss(0., sigma)
         return y
 
     def glm(self, params):
