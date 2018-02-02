@@ -1,0 +1,5 @@
+Faker==0.8.10
+numpy==1.14.0
+python-dateutil==2.6.1
+six==1.11.0
+text-unidecode==1.1
