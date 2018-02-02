@@ -102,6 +102,8 @@ class TestCase(unittest.TestCase):
         mywriter2 = Writer('test2', s2, 20000)
         mywriter2.write()
 
+        assert mywriter2.nevents == mywriter2.eventcount
+
 
 if __name__ == '__main__':
     unittest.main()
