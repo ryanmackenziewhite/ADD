@@ -96,10 +96,10 @@ class TestCase(unittest.TestCase):
         s2 = Synthesizer('examples', 'CustomModel', 'en_CA')
         print(s2.generate())
 
-        mywriter = Writer('test', s, 10000)
-        mywriter.write()
+        #mywriter = Writer('test', s, 10000)
+        #mywriter.write()
 
-        mywriter2 = Writer('test2', s2, 50000)
+        mywriter2 = Writer('test2', s2, 20000)
         mywriter2.write()
 
 

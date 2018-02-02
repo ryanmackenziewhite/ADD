@@ -24,20 +24,29 @@ class Writer(object):
         self.max_size = 1
         self.nevts = nevts
         self.evts = 0
-    
+
+    def chunk(self):
+        '''
+        Allow for concurrent generate during write
+        '''
+        print('Chunk')
+        for _ in range(self.chunk_size):
+            yield tuple(self.synth.generate())
+            self.evts += 1
+            if(self.evts == self.nevts):
+                break
+
     def write_file(self, fname):
         print('Writing file', fname)
         with open(fname, 'w') as f:
             writer = csv.writer(f)
             while (os.path.getsize(fname)//1024**2) < self.max_size:
-                data = []
-                for _ in range(self.chunk_size):
-                    data.append(tuple(self.synth.generate()))
-                    self.evts += 1
-                    if(self.evts == self.nevts):
-                        continue
+                data = list(self.chunk())
+                print('Events ', self.evts)
                 writer.writerows(data)
+                print('Continuing')
                 if(self.evts == self.nevts):
+                    print('Reached goal ', self.evts)
                     break
 
     def write(self):
