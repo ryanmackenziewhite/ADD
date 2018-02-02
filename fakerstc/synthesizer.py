@@ -41,6 +41,9 @@ class Synthesizer(object):
         self.fake = Faker(local)
         self.add_providers()
     
+    def set_seed(self, seed):
+        self.fake.seed(seed)
+
     def add_providers(self):
         '''
         Add custom providers

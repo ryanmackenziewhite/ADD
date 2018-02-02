@@ -40,7 +40,10 @@ Development notes:
                 values = list of arguments, e.g. pdf
             dictionary of fakes
                 key = name of provider class
-                values = list of optional arguments
+                values = list of optional argument
+        @TODO: Investigate use of Factory Boy. Also, see the wrapper class Faker for faker
+        https://github.com/FactoryBoy/factory_boy/blob/master/factory/faker.py
+
     Custom providers
         Follow coding guidelines from Faker
         Accept a function (with arguments) for pdfs
