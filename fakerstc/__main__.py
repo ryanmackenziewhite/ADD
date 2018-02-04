@@ -2,7 +2,7 @@
 """
 Created on Thu Jan 25 12:24:32 2018
 
-@author: ryanwhi
+@author: ryan.white4@canada.ca
 Example taken from faker
 """
 if __name__ == '__main__':
