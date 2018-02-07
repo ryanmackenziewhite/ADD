@@ -11,13 +11,12 @@ Generates the data using faker
 """
 
 import unittest
-import functools
-import importlib
-import sys, inspect
 
+from config import PROVIDERS
 from holder import Holder
 from faker import Faker
 from writer import Writer
+
 
 class Synthesizer(object):
     '''
@@ -32,10 +31,6 @@ class Synthesizer(object):
     e.g. generate data and insert null for imputation
 
     '''
-    MODULES = [name for finder, name, 
-                is_pkg in pkgutil.iter_modules(['providers']) if is_pkg]        
-    
-    PROVIDERS = [importlib.import_module('providers.'+ module) for module in MODULES]
     
     def __init__(self, module, model, local):
         '''
@@ -52,26 +47,9 @@ class Synthesizer(object):
         '''
         Add custom providers
         '''
-        # klasses = [provider.Provider for provider in PROVIDERS]
-        # for k in klasses: self.fake.add_provider(k)
-        
-        providers = self.holder.providers()
-        
-        klass = []
-        for key in providers:
-            try:
-                module_name = 'providers.' + key
-                module = importlib.import_module(module_name)
-                print(dir(module)) 
-                for provider in providers[key]:
-                    try:
-                        klass.append(getattr(module, provider))
-                    except AttributeError:
-                        print('Class does not exist ', provider)
-            except:
-                print('Module does not exist ', module_name)
-            for k in klass:
-                self.fake.add_provider(k)
+        klasses = [provider.Provider for provider in PROVIDERS]
+        for k in klasses: 
+            self.fake.add_provider(k)
 
     def generate(self):
         fakers = self.holder.fakers()
@@ -80,8 +58,7 @@ class Synthesizer(object):
             parms = fakers[fname]
             fake = None
             try:
-                # fake = self.fake.get_formatter(fname)
-                fake = functools.partial(self.fake.__getattribute__(fname))
+                fake = self.fake.get_formatter(fname)
             except:
                 print('Cannot find fake in Faker ', fname)
             
@@ -110,10 +87,10 @@ class TestCase(unittest.TestCase):
         #mywriter = Writer('test', s, 10000)
         #mywriter.write()
 
-        mywriter2 = Writer('test2', s2, 20000)
-        mywriter2.write()
+        #mywriter2 = Writer('test2', s2, 20000)
+        #mywriter2.write()
 
-        assert mywriter2.nevents == mywriter2.eventcount
+        #assert mywriter2.nevents == mywriter2.eventcount
 
 
 if __name__ == '__main__':

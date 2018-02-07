@@ -16,7 +16,7 @@ from faker.providers import BaseProvider
 import numpy as np
 
 
-class GLMProvider(BaseProvider):
+class Provider(BaseProvider):
     '''
     Simple General Linear Model with noise
     '''
@@ -69,7 +69,7 @@ class GLMProvider(BaseProvider):
         for counter, f in enumerate(fields):
             fake = None
             try:
-                fake = functools.partial(self.generator.__getattribute__(f))
+                fake = self.generator.get_formatter(f)
             except:
                 print('Cannot find fake in Faker')
             X[counter] = fake()

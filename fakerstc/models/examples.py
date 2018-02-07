@@ -17,6 +17,8 @@ model = {CustomProviders:
             {fake: args}
         }
 """
+from collections import OrderedDict
+
 from .model import Model
 
 
@@ -26,6 +28,11 @@ class SampleModelA(Model):
                 'Fakers': {'name': None,
                            'ean': 13}
                 }
+        #meta = OrderedDict
+        #meta['Name'] = {'Meta':(str,10),
+        #                'Generator':('name',None)}
+        #meta['UPC'] = {'Meta':(int,13),
+        #               'Generator':('ean',13)}
         super(SampleModelA, self).__init__(meta)
 
 
