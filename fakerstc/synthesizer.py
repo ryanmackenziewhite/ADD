@@ -32,6 +32,10 @@ class Synthesizer(object):
     e.g. generate data and insert null for imputation
 
     '''
+    MODULES = [name for finder, name, 
+                is_pkg in pkgutil.iter_modules(['providers']) if is_pkg]        
+    
+    PROVIDERS = [importlib.import_module('providers.'+ module) for module in MODULES]
     
     def __init__(self, module, model, local):
         '''
@@ -48,6 +52,9 @@ class Synthesizer(object):
         '''
         Add custom providers
         '''
+        # klasses = [provider.Provider for provider in PROVIDERS]
+        # for k in klasses: self.fake.add_provider(k)
+        
         providers = self.holder.providers()
         
         klass = []
@@ -73,6 +80,7 @@ class Synthesizer(object):
             parms = fakers[fname]
             fake = None
             try:
+                # fake = self.fake.get_formatter(fname)
                 fake = functools.partial(self.fake.__getattribute__(fname))
             except:
                 print('Cannot find fake in Faker ', fname)
