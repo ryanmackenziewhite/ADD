@@ -32,11 +32,11 @@ class Synthesizer(object):
 
     '''
     
-    def __init__(self, module, model, local):
+    def __init__(self, model, local):
         '''
         requires class model name
         '''
-        self.holder = Holder(module, model)
+        self.holder = Holder(model)
         self.fake = Faker(local)
         self.add_providers()
     
@@ -55,10 +55,10 @@ class Synthesizer(object):
         fakers = self.holder.fakers()
         darr = []
         for fname in fakers:
-            parms = fakers[fname]
+            parms = self.holder.parameters(fname)
             fake = None
             try:
-                fake = self.fake.get_formatter(fname)
+                fake = self.fake.get_formatter(self.holder.generator(fname))
             except:
                 print('Cannot find fake in Faker ', fname)
             
@@ -76,12 +76,12 @@ class Synthesizer(object):
 
 class TestCase(unittest.TestCase):
     def test(self):
-        s = Synthesizer('examples', 'SampleModelA', 'en_CA')
+        s = Synthesizer('TestModel', 'en_CA')
         print(s.generate())
         for _ in range(10):
             print(s.generate())
         
-        s2 = Synthesizer('examples', 'CustomModel', 'en_CA')
+        s2 = Synthesizer('TestModel2', 'en_CA')
         print(s2.generate())
 
         #mywriter = Writer('test', s, 10000)

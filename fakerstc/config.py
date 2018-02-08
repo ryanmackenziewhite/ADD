@@ -18,3 +18,13 @@ MODULES = [name for finder, name,
     
 PROVIDERS = [import_module('providers.' + module) 
              for module in MODULES]
+
+
+MODULESS = [name for finder, name, 
+            is_pkg in iter_modules(['models']) if is_pkg] 
+
+MODELS = [import_module('models.' + module) 
+             for module in MODULESS]
+
+print(MODULESS)
+print(MODELS)

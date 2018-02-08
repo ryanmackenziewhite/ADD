@@ -11,7 +11,7 @@
 """
 from collections import OrderedDict
 import json
-import unittest
+
 
 class Model(object):
     '''
@@ -24,10 +24,6 @@ class Model(object):
     '''
     def __init__(self, mdata):
         self.__meta = mdata
-        #if isinstance(mdata, OrderedDict):
-        #    self.__meta = mdata
-        #else:
-        #    print('Model not defined as OrderDict')
 
     @property
     def meta(self):
@@ -108,56 +104,3 @@ class OrderedModel(object):
         return self.model[name]['Parameters']
 
 
-class TestModel(OrderedModel):
-
-    def __init__(self):    
-        meta = OrderedDict()
-        meta['Name'] = {'Meta': ['String', 10],
-                        'Generator': 'name',
-                        'Parameters': None}
-        meta['UPC'] = {'Meta': ['Integer', 13],
-                       'Generator': 'ean',
-                       'Parameters': None}
-        super(TestModel, self).__init__(meta)
-
-
-class TestModel2(OrderedModel):        
-    
-    def __init__(self):
-        meta = OrderedDict()
-    
-        meta['Name'] = {'Meta': ['String', 10],
-                        'Generator': 'name',
-                        'Parameters': None}
-
-        meta['UPC'] = {'Meta': ['String', 10],
-                       'Generator': 'ean',
-                       'Parameters': 13}
-    
-        meta['Foo'] = {'Meta': ['Integer', 10],
-                       'Generator': 'foo',
-                       'Parameters': None}
-    
-        meta['Prediction'] = {'Meta': ['Float', None],
-                              'Generator': 'glm',
-                              'Parameters': {'Fakers': ['random_int', 'random_int'],
-                                             'Parameters': [10, 0.1, 100, 1]
-                                             }
-                              }
-        super(TestModel2, self).__init__(meta)
-
-    
-class TestCase(unittest.TestCase):
-    def test(self):
-        model = TestModel()
-        print(model.attributes())
-        print(model.schema())
-        for key in model.schema():
-            print(model.generator(key))
-            print(model.parameters(key))
-        
-        model.display_from_json()
-
-
-if __name__ == '__main__':
-    unittest.main()

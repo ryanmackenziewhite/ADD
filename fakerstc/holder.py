@@ -12,7 +12,7 @@ module, class and instantiate
 from string
 Instance of Holder contains one model
 """
-import importlib
+from config import MODELS
 
 
 class Holder(object):
@@ -22,25 +22,24 @@ class Holder(object):
     provides easy access to 
     Faker providers and optional arguments
     '''
-    _basemod = "models"
 
-    def __init__(self, module_name, class_name):
+    def __init__(self, class_name):
         '''
         Require passing the module name and class name
         ensure to throw error to fail init of Holder
         '''
         klass = None
-        try:
-            module_name = self._basemod + "." + module_name
-            module = importlib.import_module(module_name)
-            try:
+        for module in MODELS:
+            klasses = [key for key in dir(module) 
+                       if isinstance(getattr(module, key), type)]
+            if class_name in klasses:
                 klass = getattr(module, class_name)
-            except AttributeError:
-                print('Class does not exist', class_name)
-        except ImportError:
-            print('Module does not exist', module_name)
-        print('Added Model ', class_name) 
-        self.model = klass    
+                continue
+        if klass is None:
+            print('Cannot find model ', class_name)
+        else:
+            print('Added Model ', class_name) 
+            self.model = klass    
     
     @property
     def model(self):
@@ -60,4 +59,11 @@ class Holder(object):
         '''
         return model provider list
         '''
-        return self.model.meta['Fakers']
+        return self.model.schema()
+
+    def generator(self, name):
+        return self.model.generator(name)
+
+    def parameters(self, name):
+        return self.model.parameters(name)
+
