@@ -60,7 +60,12 @@ class Provider(BaseProvider):
         '''
         expect a dictionary
         '''
-        fields = params['Fakers']
+        generators = params['Variables']
+
+        fields = [] 
+        for item in generators:
+            fields.append(item['Generator'])
+
         beta = params['Parameters'][:-1]
         sigma = params['Parameters'][-1]
         ndof = len(params['Parameters']) 

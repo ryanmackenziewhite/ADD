@@ -58,42 +58,142 @@ class CustomModel(Model):
 class TestModel(OrderedModel):
 
     def __init__(self):    
-        meta = OrderedDict()
-        meta['Name'] = {'Meta': ['String', 10],
-                        'Generator': 'name',
-                        'Parameters': None}
-        meta['UPC'] = {'Meta': ['Integer', 13],
-                       'Generator': 'ean',
-                       'Parameters': None}
-        super(TestModel, self).__init__(meta)
+        config = OrderedDict()
+    
+        model = OrderedDict()
+        
+        model['Model'] = OrderedDict({'Name': 'TestModel',
+                                      'Description': 'Testing Purposes',
+                                      'Configuration': config} 
+                                     )
+
+        model['Client'] = {'Name': 'FooBar Enterprises'}
+        
+        model['Taxonomy'] = {}
+
+        config['Name'] = {'Meta': ['String', 10],
+                          'Generator': 'name',
+                          'Parameters': None,
+                          'Dependent': None}
+
+        config['UPC'] = {'Meta': ['Integer', 13],
+                         'Generator': 'ean',
+                         'Parameters': None,
+                         'Dependent': None
+                         }
+
+        super(TestModel, self).__init__(model)
 
 
 class TestModel2(OrderedModel):        
     
     def __init__(self):
-        meta = OrderedDict()
+        config = OrderedDict()
     
-        meta['Name'] = {'Meta': ['String', 10],
-                        'Generator': 'name',
-                        'Parameters': None}
+        model = OrderedDict()
+        
+        model['Model'] = OrderedDict({'Name': 'TestModel2',
+                                      'Description': 'Testing Purposes',
+                                      'Configuration': config} 
+                                     )
 
-        meta['UPC'] = {'Meta': ['String', 10],
-                       'Generator': 'ean',
-                       'Parameters': 13}
+        model['Client'] = {'Name': 'FooBar Enterprises'}
+        
+        model['Taxonomy'] = {}
     
-        meta['Foo'] = {'Meta': ['Integer', 10],
-                       'Generator': 'foo',
-                       'Parameters': None}
+        config['Name'] = {'Meta': ['String', 10],
+                          'Generator': 'name',
+                          'Parameters': None,
+                          'Dependent': None}
+
+        config['UPC'] = {'Meta': ['String', 10],
+                         'Generator': 'ean',
+                         'Parameters': 13,
+                         'Dependent': None}
     
-        meta['Prediction'] = {'Meta': ['Float', None],
-                              'Generator': 'glm',
-                              'Parameters': {'Fakers': ['random_int', 'random_int'],
-                                             'Parameters': [10, 0.1, 100, 1]
-                                             }
+        config['Foo'] = {'Meta': ['Integer', 10],
+                         'Generator': 'foo',
+                         'Parameters': None,
+                         'Dependent': None}
+    
+        config['Prediction'] = {'Meta': ['Float', None],
+                                'Generator': 'glm',
+                                'Parameters': {'Fakers': ['random_int', 'random_int'],
+                                               'Parameters': [10, 0.1, 100, 1]
+                                               },
+                                'Dependent': None
                               }
-        super(TestModel2, self).__init__(meta)
+        super(TestModel2, self).__init__(model)
 
     
+class EvolveModel(OrderedModel):        
+    '''
+    Model info required for generator:
+    Dataset variables must be generated in
+    order defined in header, e.g. as an OrderedDict
+    Requires:
+        Variable Name
+        Variable Type and Length (required for DQ/schema check)
+        Generator name
+        Arguments to pass to generator (i.e. the method in the Provider class)
+        Dependence on another variable, allow to generate a list of values within phase space
+    Metadata information:
+        Model name, i.e. class name 
+        Related real dataset information (e.g. modeling Tax Data)
+        Taxonomy information
+
+    '''
+    def __init__(self):
+        config = OrderedDict()
+    
+        model = OrderedDict()
+        
+        model['Model'] = OrderedDict({'Name': 'EvolveModel',
+                                      'Description': 'Testing Purposes',
+                                      'Configuration': config} 
+                                     )
+
+        model['Client'] = {'Name': 'FooBar Enterprises'}
+        
+        model['Taxonomy'] = {}
+        
+        config['Name'] = {'Meta': ['String', 10],
+                          'Generator': 'name',
+                          'Parameters': None,
+                          'Dependent': None}
+
+        config['UPC'] = {'Meta': ['String', 10],
+                         'Generator': 'ean',
+                         'Parameters': 13,
+                         'Dependent': None}
+    
+        config['Foo'] = {'Meta': ['Integer', 10],
+                         'Generator': 'foo',
+                         'Parameters': None,
+                         'Dependent': None}
+    
+        config['Value1'] = {'Meta': ['Integer', 10],
+                            'Generator': 'random_int',
+                            'Parameters': None,
+                            'Dependent': 'Prediction'}
+
+        config['Value2'] = {'Meta': ['Integer', 10],
+                            'Generator': 'random_int',
+                            'Parameters': None,
+                            'Dependent': 'Prediction'}
+        
+        config['Prediction'] = {'Meta': ['Float', None],
+                                'Generator': 'glm',
+                                'Parameters': {'Variables': [config['Value1'], 
+                                                             config['Value2']],
+                                               'Parameters': [10, 0.1, 100, 1]
+                                               },
+                                'Dependent': None
+                                }
+        
+        super(EvolveModel, self).__init__(model)
+
+
 class TestCase(unittest.TestCase):
     def test(self):
         model = TestModel()

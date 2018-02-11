@@ -55,6 +55,8 @@ class Synthesizer(object):
         fakers = self.holder.fakers()
         darr = []
         for fname in fakers:
+            if self.holder.model.dependent(fname) is True:
+                continue
             parms = self.holder.parameters(fname)
             fake = None
             try:
@@ -81,9 +83,11 @@ class TestCase(unittest.TestCase):
         for _ in range(10):
             print(s.generate())
         
-        s2 = Synthesizer('TestModel2', 'en_CA')
+        s2 = Synthesizer('EvolveModel', 'en_CA')
         print(s2.generate())
-
+ 
+        holder = Holder('EvolveModel')
+        holder.model.display_from_json()
         #mywriter = Writer('test', s, 10000)
         #mywriter.write()
 

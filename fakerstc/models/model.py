@@ -58,6 +58,10 @@ class OrderedModel(object):
     @model.setter
     def model(self, model):
         self._model = model
+    
+    @property
+    def config(self):
+        return self.model['Model']['Configuration']
 
     def save_to_json(self, filename):
         with open(filename, 'w') as ofile:
@@ -77,30 +81,40 @@ class OrderedModel(object):
         '''
         return total number of model attributes
         '''
-        return len(self.model.keys())
+        return len(self.config.keys())
 
     def schema(self):
         '''
         Names of the dataset variables
         '''
-        return self.model.keys()
+        return self.config.keys()
 
     def meta(self, name):
         '''
         Type information for the associated schema object
         '''
-        return self.model[name]['Meta']
+        return self.config[name]['Meta']
 
     def generator(self, name):
         '''
         generator name
         '''
-        return self.model[name]['Generator']
+        return self.config[name]['Generator']
 
     def parameters(self, name):
         '''
         Parameters to pass to generator method
         '''
-        return self.model[name]['Parameters']
+        return self.config[name]['Parameters']
+
+    def dependent(self, name):
+        '''
+        Checks if variable is passed to another fake for generation
+        '''
+        if self.config[name]['Dependent'] is None:
+            return False
+        else:
+            return True
+
 
 
