@@ -94,3 +94,26 @@ Development notes:
     Once we have y = mx + b, just scale to GLM using OLS with arbitrarily large parameters.
     After that, can use a logit model for y and extend to the most generalized case and
     feed to an ANN.
+
+Common Data model information that could be included as top level dictionary information:
+Data Retention
+    description
+    period
+    trigger
+Data Asset
+    description
+    reference Period
+    type
+    file type
+    record count
+    file size
+    locationURL 
+    release date
+ Data holding
+    reception frequency
+    acquisition details
+ Data holding details
+    description
+    program
+    SSI data
+    expected information (e.g., identifiers, data dictionaries, record layout (schema)
