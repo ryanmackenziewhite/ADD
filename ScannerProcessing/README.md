@@ -138,7 +138,7 @@ Jupyter notebook included (can replace the example.py code)
 3. Map 
     * Process each converted file (can be parallelized).
     * Reads msgpack file.
-    * Reads code map file (MCH0 to NAPCS).
+    * Reads code map file (product description to internal code).
     * Outputs two aggregated files in msgpack format.
     * Map Product description to internal code classification, add code column to msgpack input pd.
     * Store any missing codes from description.
