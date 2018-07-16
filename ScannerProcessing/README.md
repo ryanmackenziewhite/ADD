@@ -33,6 +33,7 @@ Additional Libraries (what is required in the venv)
 
 ### Known Tasks
 
+#### Data validation
 * Read csv file
 * Parse row
 * Define schema
@@ -42,16 +43,17 @@ Additional Libraries (what is required in the venv)
 * Store histograms to file
 * Split input file to output dataset
 * Convert to various file types
-
 * Read dataset as input
 * Rerun above steps with new dataset
 
+#### Data model / synthesis
 * Generate model from data
 * Output model 
 * Output synthetic data set
 * Rerun above steps on synthetic data
-
 * Read dataset as input
+
+#### Data analysis
 * Create analysis algorithm
 * Create a map step
 * Create a reduce step
@@ -145,8 +147,8 @@ Jupyter notebook included (can replace the example.py code)
     * Groupby code and sum, store to output.
     * Groupby Postal code and city and sum, store to output (csv).
 4. Reduce Step
-    Concat all files from NAPCS or Postal code
-    Create single data frame groupby and sum (NAPCS or Postal Code)
+    Concat all files from internal code or Postal code
+    Create single data frame groupby and sum (internal code or Postal Code)
 
 ## References    
 Data Processing and schema for csv files references:
